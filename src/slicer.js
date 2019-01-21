@@ -153,7 +153,7 @@ function SlicerViewModel(parameters) {
 
         // Buttons on the canvas, and their behaviors.
         // TODO: it's not DRY. mix of prez code and logics. need to figure out a better way
-        $("#slicer-viewport").empty().append('<div class="report"><span>Got issues or suggestions? <a target="_blank" href="https://goo.gl/forms/P9Vw2fZRYJCy7RAn1">Click here!</a></span></div>\
+        $("#slicer-viewport").empty().append('\
                   <div class="model">\
                     <button class="rotate disabled btn" title="Rotate"><img src="'
                         + PLUGIN_BASEURL
@@ -573,6 +573,18 @@ function SlicerViewModel(parameters) {
             ".tmp." + (+ new Date()),
             self.slicingViewModel.file().slice(pos)].join('');
     };
+
+    // Pause WebGL rendering when slicer tab is inactive
+    self.onTabChange = function (next, current) {
+        if (current === "#tab_plugin_slicer") {
+            self.stlViewPort.pauseRendering();
+        }
+    }
+    self.onAfterTabChange = function (current, previous) {
+        if (current === "#tab_plugin_slicer") {
+            self.stlViewPort.unpauseRendering();
+        }
+    }
 
     self.init();
 
